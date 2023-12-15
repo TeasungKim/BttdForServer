@@ -163,7 +163,7 @@ public class ApiUserController {
 
 
         String username = principal.getName();
-        Optional<User> userOptional = userRepository.findByuser_name(username);
+        Optional<User> userOptional = userRepository.findByuser_id(username);
 
         if (!userOptional.isPresent()) {
 
