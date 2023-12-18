@@ -131,7 +131,7 @@ public class ApiUserController {
      log.info("reissue first 1 : "+ principal.getName());
       String user_name = principal.getName();
 
-        userRepository.findByuser_name(user_name);
+        userRepository.findByuser_id(user_name);
         if (user_name != null){
             UserDetails userDetails = customUserDetailService.loadUserByUsername(user_name);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
