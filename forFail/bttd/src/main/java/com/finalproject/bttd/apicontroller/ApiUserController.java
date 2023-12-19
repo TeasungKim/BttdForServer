@@ -7,6 +7,8 @@ import com.finalproject.bttd.dto.*;
 import com.finalproject.bttd.entity.Board;
 import com.finalproject.bttd.entity.Comment;
 import com.finalproject.bttd.entity.User;
+import com.finalproject.bttd.mapper.BoardMapper;
+import com.finalproject.bttd.mapper.CommentMapper;
 import com.finalproject.bttd.repository.BoardRepository;
 import com.finalproject.bttd.repository.CommentRepository;
 import com.finalproject.bttd.repository.UserRepository;
@@ -37,7 +39,9 @@ import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.finalproject.bttd.apiresponse.ApiResponse.ERROR_STATUS;
 import static com.finalproject.bttd.apiresponse.ApiResponse.SUCCESS_STATUS;
@@ -142,7 +146,7 @@ public class ApiUserController {
 
             ApiResponse<AuthResponseDto> response = new ApiResponse<>();
             response.setStatus(SUCCESS_STATUS);
-            response.setMessage("Success");
+            response.setMessage("userId : " + user_name);
             response.setData(authResponseDto);
 
             return ResponseEntity.ok(response);
@@ -192,7 +196,15 @@ public class ApiUserController {
     public ResponseEntity<ApiResponse<String>> comments(@RequestBody CommentDto commentDto){
         log.info("commentDto : "+ commentDto);
         log.info("post id : " + commentDto.getPost_id());
-       try {
+        if (commentDto.getPost_id() == null) {
+            ApiResponse<String> errorResponse = new ApiResponse<>();
+            errorResponse.setStatus(ERROR_STATUS);
+            errorResponse.setMessage("해당 게시글이 없습니다");
+            errorResponse.setData(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+
+        try {
            Comment created = commentService.comments(commentDto);
 
            ApiResponse<String> response = new ApiResponse<>();
@@ -272,29 +284,40 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
 }
 
         @GetMapping("/api/getAllBoard")
-        public ResponseEntity<ApiResponse<ArrayList<Board>>> getAllBaord(){
+        public ResponseEntity<ApiResponse<List<Boards>>> getAllBaord(){
 
-        ArrayList<Board> board = boardRepository.findAll();
+       List<Board> board = boardRepository.findAll();
+            List<Boards> boardsDtoList = board.stream()
+                    .map(BoardMapper::toDto)
+                    .collect(Collectors.toList());
 
 
 
-            ApiResponse<ArrayList<Board>> response = new ApiResponse<>();
+
+            ApiResponse<List<Boards>> response = new ApiResponse<>();
             response.setStatus(SUCCESS_STATUS);
             response.setMessage("Success");
-            response.setData(board);
+            response.setData(boardsDtoList);
         return ResponseEntity.ok(response);
         }
 
 
         @GetMapping("/api/getAllComment")
-        public ResponseEntity<ApiResponse<ArrayList<Comment>>> getAllComment(){
+        public ResponseEntity<ApiResponse<List<Comments>>> getAllComment(@RequestBody CommentDto commentDto){
 
-        ArrayList<Comment> comment = commentRepository.findAll();
+        Board postId = commentDto.getPost_id();
 
-            ApiResponse<ArrayList<Comment>> response = new ApiResponse<>();
+      List<Comment> comment = commentRepository.findAllByPostId(postId);
+
+
+            List<Comments> commentDtoList = comment.stream()
+                    .map(CommentMapper::toDto)
+                    .collect(Collectors.toList());
+
+            ApiResponse<List<Comments>> response = new ApiResponse<>();
             response.setStatus(SUCCESS_STATUS);
             response.setMessage("Success");
-            response.setData(comment);
+            response.setData(commentDtoList);
             return ResponseEntity.ok(response);
         }
 

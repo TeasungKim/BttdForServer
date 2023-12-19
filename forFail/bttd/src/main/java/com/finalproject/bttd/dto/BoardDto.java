@@ -24,7 +24,7 @@ public class BoardDto {
     @JsonDeserialize(using = UserDeserializer.class)
     private User user_id;
     private String away_id;
-    private boolean score;
+    private Boolean score;
 
 //    public BoardDto() {
 //        this.post_date = new Date();

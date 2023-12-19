@@ -30,8 +30,14 @@ public class Board {
 
     private String away_id;
     @Column(name = "score")
-    private boolean score;
+    private Boolean score;
 
     public Board(String postId) {
     }
+    public Board(int post_id, String post_context, String post_title){
+        this.post_id = post_id;
+        this.post_context = post_context;
+        this.post_title = post_title;
+    }
+
 }
