@@ -45,6 +45,8 @@ public class User implements UserDetails {
     private int user_win;
     @Column(name = "user_lose")
     private int user_lose;
+    @Column(name = "photo")
+    private String photo;
 
     public User(String userId) {
     }

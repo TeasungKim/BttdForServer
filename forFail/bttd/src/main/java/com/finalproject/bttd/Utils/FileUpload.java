@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,8 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-@RestController
-@RequestMapping("/upload")
+@Service
 @RequiredArgsConstructor
 public class FileUpload {
     private final AmazonS3Client amazonS3Client;
@@ -24,7 +24,7 @@ public class FileUpload {
     private String bucket;
 
     @PostMapping
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadFile(MultipartFile file) {
         try {
             String fileName=file.getOriginalFilename();
             String fileUrl= "http://" + bucket + "/test" +fileName;

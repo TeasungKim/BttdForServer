@@ -1,5 +1,6 @@
 package com.finalproject.bttd.apicontroller;
 
+import com.finalproject.bttd.Utils.FileUpload;
 import com.finalproject.bttd.apiresponse.ApiResponse;
 import com.finalproject.bttd.apiresponse.CustomException;
 import com.finalproject.bttd.apiresponse.PostNotFoundException;
@@ -33,6 +34,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
@@ -68,13 +70,16 @@ public class ApiUserController {
     private CommentRepository commentRepository;
     @Autowired
     private BoardRepository boardRepository;
-
-
+    @Autowired
+    private FileUpload fileUpload;
 
     @PostMapping("/api/user")
-    public ResponseEntity<ApiResponse<String>> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<ApiResponse<String>> createUser(@RequestBody UserDto userDto, @RequestParam("file") MultipartFile file) {
     try{
         log.info("UserDto Id : " + userDto.getUser_id());
+        ResponseEntity<String> photo = fileUpload.uploadFile(file);
+        log.info("photo name : " + photo);
+
         User created = userService.create(userDto);
         ApiResponse<String> response = new ApiResponse<>();
         response.setStatus(SUCCESS_STATUS);
