@@ -74,11 +74,8 @@ public class ApiUserController {
     private FileUpload fileUpload;
 
     @PostMapping("/api/user")
-    public ResponseEntity<ApiResponse<String>> createUser(@RequestBody UserDto userDto, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<ApiResponse<String>> createUser(@RequestBody UserDto userDto) {
     try{
-        log.info("UserDto Id : " + userDto.getUser_id());
-        ResponseEntity<String> photo = fileUpload.uploadFile(file);
-        log.info("photo name : " + photo);
 
         User created = userService.create(userDto);
         ApiResponse<String> response = new ApiResponse<>();
