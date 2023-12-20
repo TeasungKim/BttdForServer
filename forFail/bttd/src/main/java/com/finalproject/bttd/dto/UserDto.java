@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @NoArgsConstructor
@@ -16,6 +18,9 @@ import java.util.List;
 @Data
 public class UserDto {
     private Long id;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String user_id;
     private String user_name;
     private String user_age;

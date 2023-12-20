@@ -38,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -74,7 +75,7 @@ public class ApiUserController {
     private FileUpload fileUpload;
 
     @PostMapping("/api/user")
-    public ResponseEntity<ApiResponse<String>> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<ApiResponse<String>> createUser(@Valid @RequestBody UserDto userDto) {
     try{
 
         User created = userService.create(userDto);
@@ -257,6 +258,8 @@ public class ApiUserController {
 public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto){
         int post_id = scoreDto.getPost_id();
         boolean score = scoreDto.isScore();
+
+
 
         Board board = boardRepository.findById(post_id).orElse(null); //게시글 번호 가져와서 조회
         String home_id = board.getUser_id().getUser_id(); // 홈아이디 가져옴
