@@ -48,6 +48,8 @@ public class User implements UserDetails {
     @Column(name = "photo")
     private String photo;
 
+
+
     public User(String userId) {
     }
 
@@ -85,4 +87,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
+
+
 }
