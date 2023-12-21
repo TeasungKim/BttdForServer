@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.security.Principal;
@@ -75,10 +76,10 @@ public class ApiUserController {
     private FileUpload fileUpload;
 
     @PostMapping("/api/user")
-    public ResponseEntity<ApiResponse<String>> createUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<ApiResponse<String>> createUser(@Valid @RequestBody UserDto userDto, HttpServletRequest request) {
     try{
 
-        User created = userService.create(userDto);
+        User created = userService.create(userDto, request);
         ApiResponse<String> response = new ApiResponse<>();
         response.setStatus(SUCCESS_STATUS);
         response.setMessage("Success");

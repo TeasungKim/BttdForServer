@@ -48,7 +48,8 @@ public class User implements UserDetails {
     @Column(name = "photo")
     private String photo;
 
-
+    private String verificationToken;
+    private boolean enabled = false;
 
     public User(String userId) {
     }

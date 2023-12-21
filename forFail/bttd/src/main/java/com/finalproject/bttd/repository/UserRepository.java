@@ -24,5 +24,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     //Boolean existByuser_name(String user_name);
 
+    User findByVerificationToken(String token);
+
 
 }
