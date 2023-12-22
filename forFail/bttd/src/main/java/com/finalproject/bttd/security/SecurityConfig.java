@@ -44,7 +44,7 @@ public class SecurityConfig {
     log.info("securityFilterChain 2 : ");
         http.csrf().disable().exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-    .authorizeRequests().antMatchers("/api/login","/api/user","/api/getAllBoard","/api/getAllComment","/upload").permitAll().anyRequest().authenticated()
+    .authorizeRequests().antMatchers("/api/login","/api/user","/api/getAllBoard","/api/getAllComment","/upload","/api/emailTrue").permitAll().anyRequest().authenticated()
                 .and().httpBasic();
     log.info("securityFilterChain 3 : ");
     log.info("securityFilterChain 1 : ");

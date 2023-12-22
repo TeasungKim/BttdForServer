@@ -47,8 +47,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.finalproject.bttd.apiresponse.ApiResponse.ERROR_STATUS;
-import static com.finalproject.bttd.apiresponse.ApiResponse.SUCCESS_STATUS;
+import static com.finalproject.bttd.apiresponse.ApiResponse.*;
 
 
 @Slf4j
@@ -97,6 +96,29 @@ public class ApiUserController {
         }
     }
 
+    @PostMapping("/api/emailTrue")
+    public ResponseEntity<ApiResponse<String>> emailTrue (@RequestBody EmailDto emailDto){
+     String user_id = emailDto.getUser_id();
+      Optional<User> newUserId = userRepository.findByuser_id(user_id);
+        log.info("newUserId ispresent : " + newUserId.isPresent());
+        log.info("newUserID : " + newUserId);
+        if (!newUserId.isPresent()){
+            ApiResponse<String> response = new ApiResponse<>();
+            response.setStatus(SUCCESS_STATUS);
+            response.setMessage("enable e-mail address");
+            response.setData(null);
+
+            return ResponseEntity.ok(response);
+        } else {
+            ApiResponse<String> response = new ApiResponse<>();
+            response.setStatus(FAIL_STATUS);
+            response.setMessage("allReady have e-mail address");
+            response.setData(null);
+
+            return ResponseEntity.ok(response);
+        }
+
+    }
 
 
     @PostMapping("/api/login")
