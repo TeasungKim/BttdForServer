@@ -5,6 +5,7 @@ import com.finalproject.bttd.apiresponse.ApiResponse;
 import com.finalproject.bttd.dto.UserDto;
 import com.finalproject.bttd.entity.Role;
 import com.finalproject.bttd.entity.User;
+import com.finalproject.bttd.password.PasswordValidator;
 import com.finalproject.bttd.repository.RoleRepository;
 import com.finalproject.bttd.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -42,8 +43,10 @@ public class UserService {
         String userId = userDto.getUser_id();
         Optional<User> newUser = userRepository.findByuser_id(userId);
         ApiResponse<String> response = new ApiResponse<>();
+        log.info("userID userservice: " + userId);
+        log.info("newUser userService : " + newUser);
 
-        if(userDto.isEnabled()) {
+        if(newUser.get().isEnabled()) {
             String userName = userDto.getUser_name();
             String userAge = userDto.getUser_age();
             String userWeight = userDto.getUser_weight();
@@ -54,8 +57,14 @@ public class UserService {
             existUser.setUser_age(userAge);
             existUser.setUser_weight(userWeight);
 
-            String newPassword = passwordEncoder.encode(userPassword);
-            existUser.setUser_password(newPassword);
+            if(PasswordValidator.isValid(userPassword)) {
+
+                String newPassword = passwordEncoder.encode(userPassword);
+                existUser.setUser_password(newPassword);
+            } else {
+                throw new IllegalArgumentException("Invalid password format");
+
+            }
             //      passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
             //     System.out.println(user.getUser_password());
             Role role = roleRepository.findByName("USER").get();
@@ -63,7 +72,7 @@ public class UserService {
 
             return existUser;
         } else {
-            return null;
+            throw new IllegalStateException("User not found or email not verified");
 
         }
 

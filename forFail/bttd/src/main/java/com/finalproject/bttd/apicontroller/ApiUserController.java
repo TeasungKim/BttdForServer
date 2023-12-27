@@ -81,6 +81,8 @@ public class ApiUserController {
         User created = userService.create(userDto, request);
         ApiResponse<String> response = new ApiResponse<>();
 
+
+
         if(created != null){
         response.setStatus(SUCCESS_STATUS);
         response.setMessage("Success");
