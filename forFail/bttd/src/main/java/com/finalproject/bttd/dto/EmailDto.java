@@ -7,4 +7,5 @@ import lombok.Data;
 public class EmailDto {
 
    private String user_id;
+
 }
