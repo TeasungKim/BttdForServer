@@ -1,6 +1,7 @@
 package com.finalproject.bttd.service;
 
 import com.finalproject.bttd.Utils.Utility;
+import com.finalproject.bttd.apiresponse.ApiResponse;
 import com.finalproject.bttd.dto.UserDto;
 import com.finalproject.bttd.entity.Role;
 import com.finalproject.bttd.entity.User;
@@ -8,6 +9,8 @@ import com.finalproject.bttd.repository.RoleRepository;
 import com.finalproject.bttd.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -35,26 +39,34 @@ public class UserService {
 
     @Transactional
     public User create(UserDto userDto, HttpServletRequest request) {
-  //      passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    User user = userDto.toEntity();
-   //     System.out.println(user.getUser_password());
-   String newPassword = passwordEncoder.encode(user.getUser_password());
-    user.setUser_password(newPassword);
-    Role role = roleRepository.findByName("USER").get();
-    user.setRoles(Collections.singletonList(role));
-    if(user.getUser_id() == null){
-        return null;
-    }
-        String token = UUID.randomUUID().toString();
-        user.setVerificationToken(token);
-        userRepository.save(user);
-        
-        
-        String siteURL = Utility.getSiteURL(request);
-      
-        emailService.sendVerificationEmail(user, siteURL);
+        String userId = userDto.getUser_id();
+        Optional<User> newUser = userRepository.findByuser_id(userId);
+        ApiResponse<String> response = new ApiResponse<>();
 
-        return null;
+        if(userDto.isEnabled()) {
+            String userName = userDto.getUser_name();
+            String userAge = userDto.getUser_age();
+            String userWeight = userDto.getUser_weight();
+            String userPassword = userDto.getUser_password();
+
+            User existUser = newUser.get();
+            existUser.setUser_name(userName);
+            existUser.setUser_age(userAge);
+            existUser.setUser_weight(userWeight);
+
+            String newPassword = passwordEncoder.encode(userPassword);
+            existUser.setUser_password(newPassword);
+            //      passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+            //     System.out.println(user.getUser_password());
+            Role role = roleRepository.findByName("USER").get();
+            existUser.setRoles(Collections.singletonList(role));
+
+            return existUser;
+        } else {
+            return null;
+
+        }
+
     }
 
 

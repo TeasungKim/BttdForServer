@@ -80,11 +80,20 @@ public class ApiUserController {
 
         User created = userService.create(userDto, request);
         ApiResponse<String> response = new ApiResponse<>();
+
+        if(created != null){
         response.setStatus(SUCCESS_STATUS);
         response.setMessage("Success");
         response.setData(null);
 
-        return ResponseEntity.ok(response);  }
+        return ResponseEntity.ok(response);}
+            else{
+            response.setStatus(FAIL_STATUS);
+            response.setMessage("please check the email");
+            response.setData(null);
+
+        }
+    }
         catch(Exception ex){
             ex.printStackTrace();
             ApiResponse<String> errorResponse = new ApiResponse<>();
@@ -94,6 +103,7 @@ public class ApiUserController {
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
+    return null;
     }
 
     @PostMapping("/api/emailTrue")
@@ -103,6 +113,10 @@ public class ApiUserController {
         log.info("newUserId ispresent : " + newUserId.isPresent());
         log.info("newUserID : " + newUserId);
         if (!newUserId.isPresent()){
+            User newUser = new User();
+            newUser.setUser_id(user_id);
+            userRepository.save(newUser);
+
             ApiResponse<String> response = new ApiResponse<>();
             response.setStatus(SUCCESS_STATUS);
             response.setMessage("enable e-mail address");
