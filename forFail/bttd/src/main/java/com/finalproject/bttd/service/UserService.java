@@ -16,6 +16,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -36,6 +38,9 @@ public class UserService {
     private RoleRepository roleRepository;
     @Autowired
     private EmailService emailService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
     @Transactional
@@ -79,6 +84,7 @@ public class UserService {
     }
 
 
+    @Transactional
     public boolean verifyUser(String verificationCode) {
         // 데이터베이스에서 verificationCode와 일치하는 사용자 찾기
         User user = userRepository.findByVerificationToken(verificationCode);
@@ -88,6 +94,7 @@ public class UserService {
             user.setEnabled(true);
             user.setVerificationToken(null); // 인증 토큰을 null로 설정하여 인증 완료 표시
             userRepository.save(user);
+            entityManager.flush();
             return true; // 인증 성공
         }
 
