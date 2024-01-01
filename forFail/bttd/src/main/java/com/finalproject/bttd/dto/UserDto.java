@@ -32,7 +32,7 @@ public class UserDto {
     private String photo;
 
     private String verificationToken;
-    private boolean enabled = false;
+    private Boolean enabled = false;
 
     public User toEntity(){
         return new User(id, user_id, user_name, user_age, user_weight, user_password, roles, user_win, user_lose, photo,verificationToken, enabled);

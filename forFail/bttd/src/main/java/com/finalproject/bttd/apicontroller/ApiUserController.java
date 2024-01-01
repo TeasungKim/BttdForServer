@@ -2,14 +2,14 @@ package com.finalproject.bttd.apicontroller;
 
 import com.finalproject.bttd.Utils.FileUpload;
 import com.finalproject.bttd.apiresponse.ApiResponse;
-import com.finalproject.bttd.apiresponse.CustomException;
 import com.finalproject.bttd.apiresponse.PostNotFoundException;
 import com.finalproject.bttd.dto.*;
 import com.finalproject.bttd.entity.Board;
 import com.finalproject.bttd.entity.Comment;
 import com.finalproject.bttd.entity.User;
-import com.finalproject.bttd.mapper.BoardMapper;
-import com.finalproject.bttd.mapper.CommentMapper;
+import com.finalproject.bttd.ClassMapper.BoardMapper;
+import com.finalproject.bttd.ClassMapper.CommentMapper;
+import com.finalproject.bttd.mybatismapper.BoardBatisMapper;
 import com.finalproject.bttd.repository.BoardRepository;
 import com.finalproject.bttd.repository.CommentRepository;
 import com.finalproject.bttd.repository.UserRepository;
@@ -19,14 +19,11 @@ import com.finalproject.bttd.service.BoardService;
 import com.finalproject.bttd.service.CommentService;
 import com.finalproject.bttd.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.CachingUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -34,15 +31,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -73,6 +67,9 @@ public class ApiUserController {
     private BoardRepository boardRepository;
     @Autowired
     private FileUpload fileUpload;
+
+    @Autowired
+    private BoardBatisMapper boardBatisMapper;
 
     @PostMapping("/api/user")
     public ResponseEntity<ApiResponse<String>> createUser(@Valid @RequestBody UserDto userDto, HttpServletRequest request) {
@@ -330,13 +327,13 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
         @GetMapping("/api/getAllBoard")
         public ResponseEntity<ApiResponse<List<Boards>>> getAllBaord(){
 
-       List<Board> board = boardRepository.findAll();
+       List<Board> board = boardBatisMapper.getWithComment();
+       log.info("board info : "+ board);
             List<Boards> boardsDtoList = board.stream()
                     .map(BoardMapper::toDto)
                     .collect(Collectors.toList());
 
-
-
+        log.info("boardsDtoList : " + boardsDtoList);
 
             ApiResponse<List<Boards>> response = new ApiResponse<>();
             response.setStatus(SUCCESS_STATUS);
@@ -347,24 +344,35 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
 
 
         @GetMapping("/api/getAllComment")
-        public ResponseEntity<ApiResponse<List<Comments>>> getAllComment(@RequestBody CommentDto commentDto){
+        public ResponseEntity<ApiResponse<List<Comment>>> getAllComment(@RequestBody CommentDto commentDto){
 
         Board postId = commentDto.getPost_id();
 
-      List<Comment> comment = commentRepository.findAllByPostId(postId);
+        List<Comment> comment =  commentRepository.findAllByPostId(postId);
 
 
             List<Comments> commentDtoList = comment.stream()
                     .map(CommentMapper::toDto)
                     .collect(Collectors.toList());
 
-            ApiResponse<List<Comments>> response = new ApiResponse<>();
+            ApiResponse<List<Comment>> response = new ApiResponse<>();
             response.setStatus(SUCCESS_STATUS);
             response.setMessage("Success");
-            response.setData(commentDtoList);
+            response.setData(comment);
             return ResponseEntity.ok(response);
         }
 
+
+        public ResponseEntity<String> reUser(Principal principal){
+        String userId = principal.getName();
+
+
+
+
+
+
+        return null;
+        }
 
 //
 }

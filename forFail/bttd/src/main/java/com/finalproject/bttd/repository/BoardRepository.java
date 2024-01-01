@@ -17,8 +17,8 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     @Override
     ArrayList<Board> findAll();
 
-    @Query("SELECT new Board(b.post_id, b.post_context, b.post_title) FROM Board b")
-    List<Boards> findAllm();
+//    @Query(value = "SELECT new Board(a.post_id, a.post_title, a.post_context, a.away_id, COUNT(b.post_id)) " +
+//            "FROM Board a LEFT JOIN a.post_id b ON a.post_id = b.post_id " +
+//            "GROUP BY a.post_id")  List<Board> findAllm();
 
 }
-

@@ -49,7 +49,8 @@ public class User implements UserDetails {
     private String photo;
 
     private String verificationToken;
-    private boolean enabled = false;
+    @Column(name = "enabled")
+    private Boolean enabled ;
 
     public User(String userId) {
     }
@@ -86,7 +87,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return this.enabled;
     }
 
 

@@ -42,44 +42,52 @@ public class UserService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    public User findUserById(Long id) {
+        User user = entityManager.find(User.class, id);
+        entityManager.refresh(user); // 객체를 최신 상태로 갱신
+        return user;
+    }
 
     @Transactional
     public User create(UserDto userDto, HttpServletRequest request) {
-        String userId = userDto.getUser_id();
-        Optional<User> newUser = userRepository.findByuser_id(userId);
-        ApiResponse<String> response = new ApiResponse<>();
-        log.info("userID userservice: " + userId);
-        log.info("newUser userService : " + newUser);
 
-        if(newUser.get().isEnabled()) {
-            String userName = userDto.getUser_name();
-            String userAge = userDto.getUser_age();
-            String userWeight = userDto.getUser_weight();
-            String userPassword = userDto.getUser_password();
+            String userId = userDto.getUser_id();
+            Optional<User> newUser = userRepository.findByuser_id(userId);
+            ApiResponse<String> response = new ApiResponse<>();
 
-            User existUser = newUser.get();
-            existUser.setUser_name(userName);
-            existUser.setUser_age(userAge);
-            existUser.setUser_weight(userWeight);
+            log.info("userID userservice: " + userId);
+            log.info("newUser userService : " + newUser);
+            log.info("newUser userService 2: " + newUser.get().isEnabled());
 
-            if(PasswordValidator.isValid(userPassword)) {
+            if (newUser.get().isEnabled()) {
+                String userName = userDto.getUser_name();
+                String userAge = userDto.getUser_age();
+                String userWeight = userDto.getUser_weight();
+                String userPassword = userDto.getUser_password();
 
-                String newPassword = passwordEncoder.encode(userPassword);
-                existUser.setUser_password(newPassword);
+                User existUser = newUser.get();
+                existUser.setUser_name(userName);
+                existUser.setUser_age(userAge);
+                existUser.setUser_weight(userWeight);
+
+                if (PasswordValidator.isValid(userPassword)) {
+
+                    String newPassword = passwordEncoder.encode(userPassword);
+                    existUser.setUser_password(newPassword);
+                } else {
+                    throw new IllegalArgumentException("Invalid password format");
+
+                }
+                //      passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+                //     System.out.println(user.getUser_password());
+                Role role = roleRepository.findByName("USER").get();
+                existUser.setRoles(Collections.singletonList(role));
+
+                return existUser;
             } else {
-                throw new IllegalArgumentException("Invalid password format");
+                throw new IllegalStateException("User not found or email not verified");
 
             }
-            //      passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-            //     System.out.println(user.getUser_password());
-            Role role = roleRepository.findByName("USER").get();
-            existUser.setRoles(Collections.singletonList(role));
-
-            return existUser;
-        } else {
-            throw new IllegalStateException("User not found or email not verified");
-
-        }
 
     }
 
@@ -94,7 +102,7 @@ public class UserService {
             user.setEnabled(true);
             user.setVerificationToken(null); // 인증 토큰을 null로 설정하여 인증 완료 표시
             userRepository.save(user);
-            entityManager.flush();
+            log.info("Email verification success" + user);
             return true; // 인증 성공
         }
 

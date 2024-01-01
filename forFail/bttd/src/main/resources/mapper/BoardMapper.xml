@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.finalproject.bttd.mybatismapper.BoardBatisMapper">
+
+    <select id="getWithComment" resultType="com.finalproject.bttd.entity.Board">
+
+        select a.post_id, a.post_title, a.post_context, a.away_id, count(b.post_id) as comment_count from matching_post a left join matching_request_form b on a.post_id = b.post_id group by a.post_id;
+
+    </select>
+
+</mapper>

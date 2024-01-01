@@ -1,8 +1,6 @@
-package com.finalproject.bttd.mapper;
+package com.finalproject.bttd.ClassMapper;
 
-import com.finalproject.bttd.dto.Boards;
 import com.finalproject.bttd.dto.Comments;
-import com.finalproject.bttd.entity.Board;
 import com.finalproject.bttd.entity.Comment;
 
 public class CommentMapper {
