@@ -344,21 +344,21 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
 
 
         @GetMapping("/api/getAllComment")
-        public ResponseEntity<ApiResponse<List<Comment>>> getAllComment(@RequestBody CommentDto commentDto){
+        public ResponseEntity<ApiResponse<List<Comments>>> getAllComment(@RequestBody CommentDto commentDto){
 
         Board postId = commentDto.getPost_id();
 
         List<Comment> comment =  commentRepository.findAllByPostId(postId);
 
 
-            List<Comments> commentDtoList = comment.stream()
+            List<Comments> commentDtoList = comment.stream()`
                     .map(CommentMapper::toDto)
                     .collect(Collectors.toList());
 
-            ApiResponse<List<Comment>> response = new ApiResponse<>();
+            ApiResponse<List<Comments>> response = new ApiResponse<>();
             response.setStatus(SUCCESS_STATUS);
             response.setMessage("Success");
-            response.setData(comment);
+            response.setData(commentDtoList);
             return ResponseEntity.ok(response);
         }
 
