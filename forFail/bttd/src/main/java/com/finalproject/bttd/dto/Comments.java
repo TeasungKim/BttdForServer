@@ -10,13 +10,12 @@ import java.util.List;
 
 @Data
 public class Comments {
-   public int post_id;
-   public String post_title;
-   public String post_context;
-   private Long request_form_id;
-   private String request_user_id;
-   private String request_context;
-   private Date request_date;
+
+    public int post_id;
+    public String post_title;
+    public String post_context;
+  List<CommentDetails> comments;
+
 
 
 }

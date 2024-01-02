@@ -35,6 +35,9 @@ public class Board {
     @Transient
     private int comment_count;
 
+    private Boolean user_confirm;
+    private Boolean away_confirm;
+
     public Board(String postId) {
     }
     public Board(int post_id, String post_title, String post_context, int comment_count){

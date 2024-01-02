@@ -26,12 +26,14 @@ public class BoardDto {
     private String away_id;
     private Boolean score;
     private int comment_count;
+    private Boolean user_confirm;
+    private Boolean away_confirm;
 
 //    public BoardDto() {
 //        this.post_date = new Date();
 //    }
 
     public Board toEntity() {
-        return new Board(post_id, post_title, post_context, new Date(), user_id, away_id, score, comment_count);
+        return new Board(post_id, post_title, post_context, new Date(), user_id, away_id, score, comment_count, user_confirm, away_confirm);
     }
 }

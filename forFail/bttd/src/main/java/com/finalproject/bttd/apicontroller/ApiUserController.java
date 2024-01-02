@@ -37,6 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -350,15 +351,21 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
 
         List<Comment> comment =  commentRepository.findAllByPostId(postId);
 
+            Comments commentsDto = new Comments();
+            commentsDto.setPost_id(postId.getPost_id());
+            commentsDto.setPost_title(postId.getPost_title());
+            commentsDto.setPost_context(postId.getPost_context());
 
-            List<Comments> commentDtoList = comment.stream()`
+            List<CommentDetails> commentDtoList = comment.stream()
                     .map(CommentMapper::toDto)
                     .collect(Collectors.toList());
+            commentsDto.setComments(commentDtoList);
+
 
             ApiResponse<List<Comments>> response = new ApiResponse<>();
             response.setStatus(SUCCESS_STATUS);
             response.setMessage("Success");
-            response.setData(commentDtoList);
+            response.setData(Collections.singletonList(commentsDto));
             return ResponseEntity.ok(response);
         }
 
@@ -367,12 +374,26 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
         String userId = principal.getName();
 
 
-
-
-
-
         return null;
         }
+
+        @PostMapping("/api/accessButton")
+        public  ResponseEntity<ApiResponse<String>> accessButton (@RequestBody BoardDto boardDto){
+           int post_id = boardDto.getPost_id();
+            Board newBoard = boardService.accessButton(post_id);
+            String awayId = newBoard.getAway_id();
+
+            ApiResponse<String> response = new ApiResponse<>();
+            response.setStatus(SUCCESS_STATUS);
+            response.setMessage("Success");
+            response.setData(awayId);
+
+            return ResponseEntity.ok(response);
+        }
+
+
+
+
 
 //
 }
