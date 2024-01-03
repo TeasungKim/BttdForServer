@@ -344,7 +344,7 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
         }
 
 
-        @GetMapping("/api/getAllComment")
+        @GetMapping("/api/getDetailBoard ")
         public ResponseEntity<ApiResponse<List<Comments>>> getAllComment(@RequestBody CommentDto commentDto){
 
         Board postId = commentDto.getPost_id();
@@ -370,8 +370,10 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
         }
 
 
-        public ResponseEntity<String> reUser(Principal principal){
-        String userId = principal.getName();
+        @PostMapping("/api/reUser")
+        public ResponseEntity<String> reUser(@RequestBody User user){
+
+        User reUser = userService.reUser(user);
 
 
         return null;

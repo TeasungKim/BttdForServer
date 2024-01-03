@@ -109,5 +109,13 @@ public class UserService {
         return false; // 인증 실패
     }
 
+    @Transactional
+    public User reUser(User user){
+        String user_id = user.getUser_id();
+        Optional<User> reUser = userRepository.findByuser_id(user_id);
+
+
+    }
+
     //
 }
