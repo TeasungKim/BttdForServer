@@ -371,12 +371,15 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
 
 
         @PostMapping("/api/reUser")
-        public ResponseEntity<String> reUser(@RequestBody User user){
+        public ResponseEntity<ApiResponse<String>> reUser(@RequestBody User user, Principal principal){
+        String userId = principal.getName();
+            User reUser = userService.reUser(user, userId);
+            ApiResponse<String> response = new ApiResponse<>();
+            response.setStatus(SUCCESS_STATUS);
+            response.setMessage("Success");
+            response.setData(null);
 
-        User reUser = userService.reUser(user);
-
-
-        return null;
+            return ResponseEntity.ok(response);
         }
 
         @PostMapping("/api/accessButton")

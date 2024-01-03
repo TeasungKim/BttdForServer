@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
     .authorizeRequests().antMatchers("/api/login","/api/user",
                         "/api/getAllBoard","/api/getDetailBoard ","/upload","/api/emailTrue",
-                        "/api/authenticateEmail",
+                        "/api/authenticateEmail","/api/reUser",
                         "/verify","/api/accessButton").permitAll().anyRequest().authenticated()
                 .and().httpBasic();
     log.info("securityFilterChain 3 : ");

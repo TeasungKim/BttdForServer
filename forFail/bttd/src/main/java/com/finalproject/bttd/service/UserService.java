@@ -110,11 +110,22 @@ public class UserService {
     }
 
     @Transactional
-    public User reUser(User user){
-        String user_id = user.getUser_id();
-        Optional<User> reUser = userRepository.findByuser_id(user_id);
+    public User reUser(User user, String user_id){
 
+        Optional<User> reUserOpt  = userRepository.findByuser_id(user_id);
 
+        if (reUserOpt.isPresent() && reUserOpt.get().isEnabled()) {
+            User existUser = reUserOpt.get();
+
+            existUser.setUser_name(user.getUser_name());
+            existUser.setUser_age(user.getUser_age());
+            existUser.setUser_weight(user.getUser_weight());
+
+            // 변경 감지 기능을 사용하여 데이터베이스에 저장
+            return existUser;
+
+       }
+       return null;
     }
 
     //
