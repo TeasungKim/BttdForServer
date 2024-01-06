@@ -1,5 +1,6 @@
 package com.finalproject.bttd.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.finalproject.bttd.Utils.UserDeserializer;
 import com.finalproject.bttd.entity.Board;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -27,13 +29,15 @@ public class BoardDto {
     private Boolean score;
     private int comment_count;
     private Boolean user_confirm;
-    private Boolean away_confirm;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime prefer_date;
+
 
 //    public BoardDto() {
 //        this.post_date = new Date();
 //    }
 
     public Board toEntity() {
-        return new Board(post_id, post_title, post_context, new Date(), user_id, away_id, score, comment_count, user_confirm, away_confirm);
+        return new Board(post_id, post_title, post_context, new Date(), user_id, away_id, score, comment_count, user_confirm, prefer_date);
     }
 }

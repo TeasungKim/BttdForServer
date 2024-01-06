@@ -63,13 +63,14 @@ public class UserService {
                 String userName = userDto.getUser_name();
                 String userAge = userDto.getUser_age();
                 String userWeight = userDto.getUser_weight();
+                String userExperience = userDto.getExperience();
                 String userPassword = userDto.getUser_password();
 
                 User existUser = newUser.get();
                 existUser.setUser_name(userName);
                 existUser.setUser_age(userAge);
                 existUser.setUser_weight(userWeight);
-
+                existUser.setExperience(userExperience);
                 if (PasswordValidator.isValid(userPassword)) {
 
                     String newPassword = passwordEncoder.encode(userPassword);
@@ -120,6 +121,7 @@ public class UserService {
             existUser.setUser_name(user.getUser_name());
             existUser.setUser_age(user.getUser_age());
             existUser.setUser_weight(user.getUser_weight());
+            existUser.setExperience(user.getExperience());
 
             // 변경 감지 기능을 사용하여 데이터베이스에 저장
             return existUser;

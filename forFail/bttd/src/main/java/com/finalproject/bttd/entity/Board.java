@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -36,7 +37,8 @@ public class Board {
     private int comment_count;
 
     private Boolean user_confirm;
-    private Boolean away_confirm;
+    private LocalDateTime prefer_date;
+
 
     public Board(String postId) {
     }

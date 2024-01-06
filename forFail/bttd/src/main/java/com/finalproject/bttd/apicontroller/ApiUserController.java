@@ -295,7 +295,7 @@ public class ApiUserController {
 public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto){
         int post_id = scoreDto.getPost_id();
         boolean score = scoreDto.isScore();
-
+        score = true;
 
 
         Board board = boardRepository.findById(post_id).orElse(null); //게시글 번호 가져와서 조회
@@ -345,27 +345,33 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
 
 
         @GetMapping("/api/getDetailBoard ")
-        public ResponseEntity<ApiResponse<List<Comments>>> getAllComment(@RequestBody CommentDto commentDto){
+        public ResponseEntity<ApiResponse<List<Comments>>> getAllComment(@RequestParam int post_id){
 
-        Board postId = commentDto.getPost_id();
+       // Board postId = commentDto.getPost_id();
 
-        List<Comment> comment =  commentRepository.findAllByPostId(postId);
 
-            Comments commentsDto = new Comments();
-            commentsDto.setPost_id(postId.getPost_id());
-            commentsDto.setPost_title(postId.getPost_title());
-            commentsDto.setPost_context(postId.getPost_context());
+       List<Comments> commentList =  boardBatisMapper.findByPostUser(post_id);
+       List<Comment> dge = commentRepository.findAllByPostId(post_id);
 
-            List<CommentDetails> commentDtoList = comment.stream()
+            log.info("commentList : " + commentList);
+
+          //  Comments commentsDto = new Comments();
+          //  commentsDto.setPost_id(postId.getPost_id());
+          //  commentsDto.setPost_title(postId.getPost_title());
+         //   commentsDto.setPost_context(postId.getPost_context());
+        //    commentsDto.setScore(postId.getScore());
+
+            List<CommentDetails> commentDetailsList = dge.stream()
                     .map(CommentMapper::toDto)
                     .collect(Collectors.toList());
-            commentsDto.setComments(commentDtoList);
+            commentList.forEach(comments -> comments.setComments(commentDetailsList));
+
 
 
             ApiResponse<List<Comments>> response = new ApiResponse<>();
             response.setStatus(SUCCESS_STATUS);
             response.setMessage("Success");
-            response.setData(Collections.singletonList(commentsDto));
+            response.setData(commentList);
             return ResponseEntity.ok(response);
         }
 
@@ -396,7 +402,21 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
             return ResponseEntity.ok(response);
         }
 
+        @GetMapping("/api/userBoardList")
+        public ResponseEntity<ApiResponse<List<Board>>> userBoardList(Principal principal){
+        String user_id = principal.getName();
+        log.info("userBoardList user_id : " + user_id);
+        List<Board> board = boardBatisMapper.getUserBoard(user_id);
+        log.info("board : " + board);
 
+
+            ApiResponse<List<Board>> response = new ApiResponse<>();
+            response.setStatus(SUCCESS_STATUS);
+            response.setMessage("Success");
+            response.setData(board);
+
+            return ResponseEntity.ok(response);
+        }
 
 
 

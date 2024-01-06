@@ -7,5 +7,30 @@
         select a.post_id, a.post_title, a.post_context, a.away_id, count(b.post_id) as comment_count from matching_post a left join matching_request_form b on a.post_id = b.post_id group by a.post_id;
 
     </select>
+    <select id="getUserBoard" resultType="com.finalproject.bttd.entity.Board">
+
+        select * from matching_post where user_id = #{user_id};
+    </select>
+
+    <select id="findByTitleContaining" resultType="com.finalproject.bttd.entity.Board">
+        SELECT * FROM matching_post
+        WHERE post_title LIKE CONCAT('%', #{keyword}, '%')
+        OR post_context LIKE CONCAT('%', #{keyword}, '%');
+    </select>
+
+    <select id="findByPostUser" resultType="com.finalproject.bttd.dto.Comments">
+        SELECT
+        mp.post_id, mp.post_title, mp.post_context, mp.post_date, mp.Score,
+        u.user_age,
+        u.user_weight,
+        u.user_win,
+        u.user_lose
+        FROM
+        matching_post mp
+        JOIN
+        user u ON mp.user_id = u.user_id
+        where
+        mp.post_id = #{postId};
+    </select>
 
 </mapper>

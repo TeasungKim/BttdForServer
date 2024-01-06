@@ -14,7 +14,15 @@ public class Comments {
     public int post_id;
     public String post_title;
     public String post_context;
-  List<CommentDetails> comments;
+    public Boolean score;
+    public String user_age;
+    public String user_weight;
+    public int user_win;
+    public int user_lose;
+
+
+
+    List<CommentDetails> comments;
 
 
 

@@ -37,6 +37,7 @@ public class User implements UserDetails {
     @Column(name="user_password")
     private String user_password;
 
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     , inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -50,7 +51,10 @@ public class User implements UserDetails {
 
     private String verificationToken;
     @Column(name = "enabled")
-    private Boolean enabled ;
+    private boolean enabled ;
+
+    @Column
+    private String experience;
 
     public User(String userId) {
     }
