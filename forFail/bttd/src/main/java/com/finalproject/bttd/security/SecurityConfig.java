@@ -47,7 +47,7 @@ public class SecurityConfig {
     .authorizeRequests().antMatchers("/api/login","/api/user",
                         "/api/getAllBoard","/api/getDetailBoard ","/upload","/api/emailTrue",
                         "/api/authenticateEmail","/api/reUser","/api/searchBoard",
-                        "/verify","/api/accessButton").permitAll().anyRequest().authenticated()
+                        "/verify","/api/accessButton","/api/userEmailConfirm").permitAll().anyRequest().authenticated()
                 .and().httpBasic();
     log.info("securityFilterChain 3 : ");
     log.info("securityFilterChain 1 : ");

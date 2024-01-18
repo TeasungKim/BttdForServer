@@ -418,6 +418,36 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
             return ResponseEntity.ok(response);
         }
 
+        @GetMapping("/api/userEmailConfirm")
+        public ResponseEntity<ApiResponse<String>> userEmailConfirm(@RequestParam String user_id){
+
+            Optional<User> user = userRepository.findByuser_id(user_id);
+            if(user.isEmpty()){
+                ApiResponse<String> response = new ApiResponse<>();
+                response.setStatus(SUCCESS_STATUS);
+                response.setMessage("Please proceed with email verification first");
+                response.setData(null);
+                return ResponseEntity.ok(response);
+
+            }
+
+            boolean enabled = user.get().isEnabled();
+            if(enabled){
+                ApiResponse<String> response = new ApiResponse<>();
+                response.setStatus(SUCCESS_STATUS);
+                response.setMessage("valid email address");
+                response.setData(null);
+                return ResponseEntity.ok(response);
+            } else {
+                ApiResponse<String> response = new ApiResponse<>();
+                response.setStatus(FAIL_STATUS);
+                response.setMessage("Please check the email address");
+                response.setData(null);
+                return ResponseEntity.ok(response);
+            }
+
+
+        }
 
 
 //
