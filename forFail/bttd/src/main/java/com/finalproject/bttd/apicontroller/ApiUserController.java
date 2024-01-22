@@ -39,6 +39,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -469,6 +470,24 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
             return ResponseEntity.ok(response);
 
         }
+ //토큰값이 true인지, false인지 확인하는 api만들기
+
+    @GetMapping("/api/tokenEnable")
+    public ResponseEntity<ApiResponse<String>> tokenEnable(@RequestBody EnableTokenDto enableTokenDto){
+
+        String newToken = enableTokenDto.getToken();
+        log.info("is token real : " + newToken);
+        boolean isValid = jwtGenerator.validateToken(newToken);
+        log.info("isValid : " + isValid);
+
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setStatus(SUCCESS_STATUS);
+        response.setMessage("success");
+        response.setData(String.valueOf(isValid));
+        return ResponseEntity.ok(response);
+
+    }
+
 
 //
 }

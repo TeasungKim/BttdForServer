@@ -56,8 +56,9 @@ public boolean validateToken (String token){
             return true;
 
         } catch(Exception ex){
-            log.info("validateToken Error : " + ex);
-           throw new SignatureException("invalid token");
+//            log.info("validateToken Error : " + ex);
+//           throw new SignatureException("invalid token");
+            return false;
 
         }
 
