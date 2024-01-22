@@ -20,7 +20,7 @@
 
     <select id="findByPostUser" resultType="com.finalproject.bttd.dto.Comments">
         SELECT
-        mp.post_id, mp.post_title, mp.post_context, mp.post_date, mp.Score,
+        mp.post_id, mp.post_title, mp.post_context, mp.post_date, mp.Score, mp.user_id, mp.away_id,
         u.user_age,
         u.user_weight,
         u.user_win,

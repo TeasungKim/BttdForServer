@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -352,14 +353,29 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
        List<Comments> commentList =  boardBatisMapper.findByPostUser(post_id);
        List<Comment> dge = commentRepository.findAllByPostId(post_id);
 
+            log.info("commentList starts here now : " + commentList);
+
+            List<CommentDetails> commentDetailsList1 = new ArrayList<>();
+            for (Comment comment : dge) {
+                CommentDetails details = CommentMapper.toDto(comment);
+                log.info("commentDetailsList comment information : " + comment);
+                log.info("commentDetailsList comment2 information : " + comment.getRequest_user_id());
+                User user = userRepository.findByuser_id(comment.getRequest_user_id()).orElse(null);
+                log.info("commentDetailsList user information : " + user);
+                log.info("commentDetailsList photo information : " + user.getPhoto());
+                if (user != null) {
+                    details.setPhoto(user.getPhoto()); // CommentDetails DTO에 photo 정보 설정
+                }
+                commentDetailsList1.add(details);
+            }
 
 
-            log.info("commentList : " + commentList);
 
-            List<CommentDetails> commentDetailsList = dge.stream()
-                    .map(CommentMapper::toDto)
-                    .collect(Collectors.toList());
-            commentList.forEach(comments -> comments.setComments(commentDetailsList));
+//
+//            List<CommentDetails> commentDetailsList = dge.stream()
+//                    .map(CommentMapper::toDto)
+//                    .collect(Collectors.toList());
+            commentList.forEach(comments -> comments.setComments(commentDetailsList1));
 
             ApiResponse<List<Comments>> response = new ApiResponse<>();
             response.setStatus(SUCCESS_STATUS);

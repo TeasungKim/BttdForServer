@@ -76,6 +76,8 @@ public class CacheRepository {
         log.info("verify 3 :" + privateToken);
         List<cacheDto> cacheDtos = new ArrayList<>(store.values()); // store.values()를 List로 변환
 
+        log.info("verify 3.1 : " + cacheDtos);
+
         for (int i = 0; i < cacheDtos.size(); i++) {
             cacheDto dto = cacheDtos.get(i);
             if (dto.getPrivateToken().equals(privateToken)) {

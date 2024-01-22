@@ -88,7 +88,7 @@ public class UserService {
         log.info("verify 2 :" + privateToken);
         // 데이터베이스에서 verificationCode와 일치하는 사용자 찾기
         cacheDto cachedto = cacheRepository.findByVerificationToken(privateToken);
-
+        log.info("verify 4 : " + cachedto);
         if (cachedto != null) {
             // 사용자의 상태를 '활성화'로 업데이트
             cachedto.setEnable(true);

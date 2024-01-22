@@ -2,6 +2,7 @@ package com.finalproject.bttd.mybatismapper;
 
 import com.finalproject.bttd.dto.Comments;
 import com.finalproject.bttd.entity.Board;
+import com.finalproject.bttd.entity.Comment;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public interface BoardBatisMapper {
     List<Board> findByTitleContaining(String keyword);
 
     List<Comments> findByPostUser(int postId);
+
 
 
 }
