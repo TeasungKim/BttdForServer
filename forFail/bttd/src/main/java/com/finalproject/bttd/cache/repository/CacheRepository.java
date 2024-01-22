@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -24,7 +25,7 @@ public class CacheRepository {
 
 //    @Cacheable(key = "'all'")
     public cacheDtos findAll() {
-        List<cacheDto> cacheDtos = store.values().stream().toList();
+        List<cacheDto> cacheDtos = store.values().stream().collect(Collectors.toList());
         log.info("Repository findAll {}", cacheDtos);
         return new cacheDtos(cacheDtos);
     }
