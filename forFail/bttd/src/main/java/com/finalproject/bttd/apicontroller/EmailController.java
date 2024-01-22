@@ -30,46 +30,38 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
-    @GetMapping("/verify")
-    public ResponseEntity<?> verifyUser(@RequestParam("code") String verificationCode) {
-        boolean isVerified = userService.verifyUser(verificationCode);
-        if (isVerified) {
-            return ResponseEntity.ok("Account verified successfully.");
-        } else {
-            return ResponseEntity.badRequest().body("Invalid or expired verification token.");
-        }
-    }
 
-    @PostMapping("/api/authenticateEmail")
-    public ResponseEntity<ApiResponse<String>> authenticateEmail(@RequestBody EmailDto emailDto, HttpServletRequest request){
-        String userId = emailDto.getUser_id();
-        Optional<User> newUserOpt = userRepository.findByuser_id(userId);
 
-        if (newUserOpt.isPresent()) {
-            User newUser = newUserOpt.get();
+   // @PostMapping("/api/authenticateEmail")
+  //  public ResponseEntity<ApiResponse<String>> authenticateEmail(@RequestBody EmailDto emailDto, HttpServletRequest request){
+   //     String userId = emailDto.getUser_id();
+   //     Optional<User> newUserOpt = userRepository.findByuser_id(userId);
 
-            String token = UUID.randomUUID().toString();
-            newUser.setVerificationToken(token);
-            userRepository.save(newUser);
+   //     if (newUserOpt.isPresent()) {
+   //         User newUser = newUserOpt.get();
 
-            String siteURL = Utility.getSiteURL(request);
-            emailService.sendVerificationEmail(newUser, siteURL);
+   //         String token = UUID.randomUUID().toString();
+     //       newUser.setVerificationToken(token);
+       //     userRepository.save(newUser);
 
-            ApiResponse<String> response = new ApiResponse<>();
-            response.setStatus(SUCCESS_STATUS);  // SUCCESS_STATUS는 성공 상태를 나타내는 상수
-            response.setMessage("Verification email sent.");
-            response.setData(null);
+         //   String siteURL = Utility.getSiteURL(request);
+           // emailService.sendVerificationEmail(newUser, siteURL);
 
-            return ResponseEntity.ok(response);
-        } else {
-            ApiResponse<String> response = new ApiResponse<>();
-            response.setStatus(FAIL_STATUS);  // FAIL_STATUS는 실패 상태를 나타내는 상수
-            response.setMessage("User not found.");
-            response.setData(null);
+  //          ApiResponse<String> response = new ApiResponse<>();
+    //        response.setStatus(SUCCESS_STATUS);  // SUCCESS_STATUS는 성공 상태를 나타내는 상수
+      //      response.setMessage("Verification email sent.");
+        //    response.setData(null);
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-    }
+          //  return ResponseEntity.ok(response);
+  //      } else {
+    //        ApiResponse<String> response = new ApiResponse<>();
+      //      response.setStatus(FAIL_STATUS);  // FAIL_STATUS는 실패 상태를 나타내는 상수
+        //    response.setMessage("User not found.");
+          //  response.setData(null);
+
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+  //      }
+ //   }
 
 
 

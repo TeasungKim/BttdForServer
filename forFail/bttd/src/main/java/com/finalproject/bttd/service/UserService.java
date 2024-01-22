@@ -2,6 +2,8 @@ package com.finalproject.bttd.service;
 
 import com.finalproject.bttd.Utils.Utility;
 import com.finalproject.bttd.apiresponse.ApiResponse;
+import com.finalproject.bttd.cache.cacheDto.cacheDto;
+import com.finalproject.bttd.cache.repository.CacheRepository;
 import com.finalproject.bttd.dto.UserDto;
 import com.finalproject.bttd.entity.Role;
 import com.finalproject.bttd.entity.User;
@@ -39,6 +41,9 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private CacheRepository cacheRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -49,61 +54,47 @@ public class UserService {
     }
 
     @Transactional
-    public User create(UserDto userDto, HttpServletRequest request) {
+    public User create(User user, HttpServletRequest request) {
 
-            String userId = userDto.getUser_id();
-            Optional<User> newUser = userRepository.findByuser_id(userId);
-            ApiResponse<String> response = new ApiResponse<>();
 
-            log.info("userID userservice: " + userId);
-            log.info("newUser userService : " + newUser);
-            log.info("newUser userService 2: " + newUser.get().isEnabled());
+            String userId = user.getUser_id();
+            String userPassword = user.getUser_password();
 
-            if (newUser.get().isEnabled()) {
-                String userName = userDto.getUser_name();
-                String userAge = userDto.getUser_age();
-                String userWeight = userDto.getUser_weight();
-                String userExperience = userDto.getExperience();
-                String userPassword = userDto.getUser_password();
-
-                User existUser = newUser.get();
-                existUser.setUser_name(userName);
-                existUser.setUser_age(userAge);
-                existUser.setUser_weight(userWeight);
-                existUser.setExperience(userExperience);
+            cacheDto cacheDto = cacheRepository.findById(userId);
+            if(cacheDto.isEnable()){
                 if (PasswordValidator.isValid(userPassword)) {
 
                     String newPassword = passwordEncoder.encode(userPassword);
-                    existUser.setUser_password(newPassword);
+                    user.setUser_password(newPassword);
                 } else {
                     throw new IllegalArgumentException("Invalid password format");
 
                 }
-                //      passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-                //     System.out.println(user.getUser_password());
                 Role role = roleRepository.findByName("USER").get();
-                existUser.setRoles(Collections.singletonList(role));
+                user.setRoles(Collections.singletonList(role));
 
-                return existUser;
+
+                User newUser = userRepository.save(user);
+
+                return newUser;
             } else {
-                throw new IllegalStateException("User not found or email not verified");
-
+                throw new IllegalArgumentException("check the email verify");
             }
-
     }
 
 
     @Transactional
-    public boolean verifyUser(String verificationCode) {
+    public boolean verifyUser(String privateToken) {
+        log.info("verify 2 :" + privateToken);
         // 데이터베이스에서 verificationCode와 일치하는 사용자 찾기
-        User user = userRepository.findByVerificationToken(verificationCode);
+        cacheDto cachedto = cacheRepository.findByVerificationToken(privateToken);
 
-        if (user != null && !user.isEnabled()) {
+        if (cachedto != null) {
             // 사용자의 상태를 '활성화'로 업데이트
-            user.setEnabled(true);
-            user.setVerificationToken(null); // 인증 토큰을 null로 설정하여 인증 완료 표시
-            userRepository.save(user);
-            log.info("Email verification success" + user);
+            cachedto.setEnable(true);
+            cachedto.setPrivateToken(null); // 인증 토큰을 null로 설정하여 인증 완료 표시
+            cacheRepository.save(cachedto);
+            log.info("Email verification success" + cachedto);
             return true; // 인증 성공
         }
 

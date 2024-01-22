@@ -1,5 +1,6 @@
 package com.finalproject.bttd.service;
 
+import com.finalproject.bttd.cache.cacheDto.cacheDto;
 import com.finalproject.bttd.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSendException;
@@ -17,13 +18,13 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendVerificationEmail(User user, String siteURL) {
+    public void sendVerificationEmail(cacheDto cachedto, String siteURL) {
         String subject = "Please verify your registration";
         String senderName = "Your Company";
-        String mailContent = "<p>Dear " + user.getUser_id() + ",</p>";
+        String mailContent = "<p>Dear " + cachedto.getEmail() + ",</p>";
         mailContent += "<p>Please click the link below to verify your registration:</p>";
 
-        String verifyURL = siteURL + "/verify?code=" + user.getVerificationToken();
+        String verifyURL = siteURL + "/verify?code=" + cachedto.getPrivateToken();
 
         mailContent += "<h3><a href=\"" + verifyURL + "\">VERIFY</a></h3>";
         mailContent += "<p>Thank you<br>The Company Team</p>";
@@ -33,7 +34,7 @@ public class EmailService {
 
         try {
             helper.setFrom("kingkim59@naver.com", senderName);
-            helper.setTo(user.getUser_id());
+            helper.setTo(cachedto.getEmail());
             helper.setSubject(subject);
             helper.setText(mailContent, true);
 

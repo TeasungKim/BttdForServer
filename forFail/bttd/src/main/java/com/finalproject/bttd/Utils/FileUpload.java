@@ -42,7 +42,7 @@ public class FileUpload {
             String fileName=file.getOriginalFilename();
             String uniqueName = makeUniqueFilename(fileName);
 
-            String fileUrl= "http://" + bucket + "/test" +uniqueName;
+            String fileUrl= "http://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" +uniqueName;
             ObjectMetadata metadata= new ObjectMetadata();
             metadata.setContentType(file.getContentType());
             metadata.setContentLength(file.getSize());
@@ -51,7 +51,7 @@ public class FileUpload {
            Optional<User> user = userRepository.findByuser_id(user_id);
             if (user.isPresent()) {
                 User userEntity = user.get();
-                userEntity.setPhoto(uniqueName);
+                userEntity.setPhoto(fileUrl);
                 userRepository.save(userEntity);
             } else {
                 log.error("User not found with id: " + user_id);
@@ -67,11 +67,11 @@ public class FileUpload {
 
     private String makeUniqueFilename(String fileName) {
         // 파일 확장자 추출
-        String extension = "";
-        int extensionIndex = fileName.lastIndexOf('.');
-        if (extensionIndex >= 0) {
-            extension = fileName.substring(extensionIndex);
-        }
+        String extension = ".png";
+//        int extensionIndex = fileName.lastIndexOf('.');
+//        if (extensionIndex >= 0) {
+//            extension = fileName.substring(extensionIndex);
+//        }
 
         // UUID를 사용하여 파일 이름 생성
         String uuid = UUID.randomUUID().toString();
