@@ -36,7 +36,15 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("not normal process 1: ");
 
+
         String token = getJWTFromRequest(request);
+        if(token == null){
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+            response.setContentType("application/json"); // 콘텐츠 유형 설정
+            response.setCharacterEncoding("UTF-8"); // 문자 인코딩 설정
+            response.getWriter().write("{\"error\":\"토큰이 없슈! \"}");
+            return;
+        }
 
         log.info("not normal process 2: " + token);
 
@@ -85,7 +93,9 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             // 에러처리
             log.info("fileter 3");
             response.setStatus(HttpStatus.BAD_REQUEST.value());
-            response.getWriter().write("유효한 토큰이 없습니다");
+            response.setContentType("application/json"); // 콘텐츠 유형 설정
+            response.setCharacterEncoding("UTF-8"); // 문자 인코딩 설정
+            response.getWriter().write("{\"error\":\"유효한 토큰이 없습니다\"}");
             return;
 
 

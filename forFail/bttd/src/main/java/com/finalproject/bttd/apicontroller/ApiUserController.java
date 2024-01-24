@@ -461,15 +461,17 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
 
         @GetMapping("/api/userDetails")
     public ResponseEntity<ApiResponse<UserDetailDto>> userDetails(@RequestParam String user_id){
+
+
             UserDetailDto user = userBatisMapper.getUserDetails(user_id);
 
             ApiResponse<UserDetailDto> response = new ApiResponse<>();
             response.setStatus(SUCCESS_STATUS);
             response.setMessage("success");
             response.setData(user);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);}
 
-        }
+
  //토큰값이 true인지, false인지 확인하는 api만들기
 
     @GetMapping("/api/tokenEnable")
