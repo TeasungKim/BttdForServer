@@ -25,7 +25,10 @@ public class CacheRepository {
 
 //    @Cacheable(key = "'all'")
     public cacheDtos findAll() {
-        List<cacheDto> cacheDtos = store.values().stream().collect(Collectors.toList());
+        List<cacheDto> cacheDtos = new ArrayList<>();
+        for (cacheDto item : store.values()) {
+            cacheDtos.add(item);
+        }
         log.info("Repository findAll {}", cacheDtos);
         return new cacheDtos(cacheDtos);
     }
