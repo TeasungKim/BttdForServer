@@ -29,7 +29,7 @@ public class CacheRepository {
         for (cacheDto item : store.values()) {
             cacheDtos.add(item);
         }
-        log.info("Repository findAll {}", cacheDtos);
+        log.info("Repository findAll {1}", cacheDtos);
         return new cacheDtos(cacheDtos);
     }
 
