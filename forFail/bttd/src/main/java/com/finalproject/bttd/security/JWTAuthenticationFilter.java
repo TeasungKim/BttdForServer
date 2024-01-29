@@ -38,13 +38,13 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
 
         String token = getJWTFromRequest(request);
-        if(token == null){
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            response.setContentType("application/json"); // 콘텐츠 유형 설정
-            response.setCharacterEncoding("UTF-8"); // 문자 인코딩 설정
-            response.getWriter().write("{\"error\":\"토큰이 없슈! \"}");
-            return;
-        }
+//        if(token == null){
+//            response.setStatus(HttpStatus.BAD_REQUEST.value());
+//            response.setContentType("application/json"); // 콘텐츠 유형 설정
+//            response.setCharacterEncoding("UTF-8"); // 문자 인코딩 설정
+//            response.getWriter().write("{\"error\":\"토큰이 없슈! \"}");
+//            return;
+//        }
 
         log.info("not normal process 2: " + token);
 
