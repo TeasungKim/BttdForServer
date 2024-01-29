@@ -4,3 +4,4 @@
 /forFail/bttd/.gradle/8.4/executionHistory/executionHistory.lock
 /forFail/bttd/.gradle/8.4/fileHashes/fileHashes.lock
 .gradle/
+src/main/resources/application.properties
