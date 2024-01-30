@@ -48,7 +48,8 @@ public class SecurityConfig {
                         "/api/getAllBoard","/api/getDetailBoard ","/upload","/api/emailTrue",
                         "/api/authenticateEmail","/api/reUser","/api/searchBoard",
                         "/verify","/api/accessButton","/api/userEmailConfirm","/cache/firstSave",
-                        "/cache/findAll","/cache/sendEmail","/add","/api/tokenEnable").permitAll().anyRequest().authenticated()
+                        "/cache/findAll","/cache/sendEmail","/add","/api/tokenEnable",
+                "/api/getBoardListPage").permitAll().anyRequest().authenticated()
                 .and().httpBasic();
     log.info("securityFilterChain 3 : ");
     log.info("securityFilterChain 1 : ");

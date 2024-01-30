@@ -21,4 +21,5 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 //            "FROM Board a LEFT JOIN a.post_id b ON a.post_id = b.post_id " +
 //            "GROUP BY a.post_id")  List<Board> findAllm();
 
+
 }

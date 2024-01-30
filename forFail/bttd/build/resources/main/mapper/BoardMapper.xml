@@ -33,5 +33,13 @@
         mp.post_id = #{postId};
     </select>
 
+    <select id="getPage" resultType="com.finalproject.bttd.entity.Board">
+
+    select * from matching_post order by post_date DESC limit #{limitNum}, 10;
+
+    </select>
+
+
+
 
 </mapper>

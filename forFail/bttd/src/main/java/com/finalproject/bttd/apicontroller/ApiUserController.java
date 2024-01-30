@@ -490,6 +490,21 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
 
     }
 
+    @GetMapping("/api/getBoardListPage")
+    public ResponseEntity<ApiResponse<String>> getBoardListPage(@RequestParam int pageNum){
+
+        log.info("paging starts 1 : " + pageNum);
+        int limitNum = ((pageNum - 1) * 10);
+        log.info("paging starts 2 : " + limitNum);
+        List<Board> board = boardService.getBoardListPage(limitNum);
+        log.info("paging starts 5 : " + board);
+
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setStatus(SUCCESS_STATUS);
+        response.setMessage("success");
+        response.setData(board.toString());
+        return ResponseEntity.ok(response);
+    }
 
 //
 }

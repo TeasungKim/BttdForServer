@@ -17,6 +17,6 @@ public interface BoardBatisMapper {
 
     List<Comments> findByPostUser(int postId);
 
-
+    List<Board> getPage(int limitNum);
 
 }
