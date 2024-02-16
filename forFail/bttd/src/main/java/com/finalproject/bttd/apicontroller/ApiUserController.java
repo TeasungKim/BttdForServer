@@ -346,7 +346,7 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
         }
 
 
-        @GetMapping("/api/getDetailBoard ")
+        @GetMapping("/api/getDetailBoard")
         public ResponseEntity<ApiResponse<List<Comments>>> getAllComment(@RequestParam int post_id){
 
 
