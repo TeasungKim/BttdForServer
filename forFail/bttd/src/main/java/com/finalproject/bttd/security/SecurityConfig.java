@@ -46,7 +46,7 @@ public class SecurityConfig {
         http.csrf().disable().exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
     .authorizeRequests().antMatchers("/api/login","/api/user",
-                        "/api/getAllBoard","/api/getDetailBoard ","/upload","/api/emailTrue",
+                        "/api/getAllBoard","/api/getDetailBoard","/upload","/api/emailTrue",
                         "/api/authenticateEmail","/api/reUser","/api/searchBoard",
                         "/verify","/api/accessButton","/api/userEmailConfirm","/cache/firstSave",
                         "/cache/findAll","/cache/sendEmail","/add","/api/tokenEnable",
