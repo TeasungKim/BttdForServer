@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,8 +50,11 @@ public class SecurityConfig {
                         "/api/authenticateEmail","/api/reUser","/api/searchBoard",
                         "/verify","/api/accessButton","/api/userEmailConfirm","/cache/firstSave",
                         "/cache/findAll","/cache/sendEmail","/add","/api/tokenEnable",
-                "/api/getBoardListPage").permitAll().anyRequest().authenticated()
-                .and().httpBasic();
+                "/api/getBoardListPage","/chat").permitAll().anyRequest().authenticated()
+                .and().httpBasic()
+                .and().headers()
+                .contentSecurityPolicy("script-src 'self'; object-src 'self';");
+
     log.info("securityFilterChain 3 : ");
     log.info("securityFilterChain 1 : ");
     http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class).
