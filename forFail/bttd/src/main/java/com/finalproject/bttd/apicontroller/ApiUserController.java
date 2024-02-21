@@ -349,7 +349,7 @@ public ResponseEntity<ApiResponse<String>> score(@RequestBody ScoreDto scoreDto)
         @GetMapping("/api/getDetailBoard")
         public ResponseEntity<ApiResponse<List<Comments>>> getAllComment(@RequestParam int post_id){
 
-
+        log.info("getDetailBoard : success");
 
        List<Comments> commentList =  boardBatisMapper.findByPostUser(post_id);
        List<Comment> dge = commentRepository.findAllByPostId(post_id);
